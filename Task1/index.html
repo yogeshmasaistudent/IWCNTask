@@ -12,14 +12,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
-  <body>
 
+  <body>
     <div id="root" class="container">
       <!-- Add class "container" for styling -->
       <!-- React component -->
       <script type="text/babel">
-        const { useState } = React; // Destructure useState directly from React
+        const { useState, useRef, useEffect } = React; // Destructure useState, useRef, and useEffect directly from React
+
         const App = () => {
+          // State for managing table data
           const [data, setData] = useState([
             { id: 1, mount: "", email: "", address: "", phone: "" },
             { id: 2, mount: "", email: "", address: "", phone: "" },
@@ -31,97 +33,146 @@
             { id: 8, mount: "", email: "", address: "", phone: "" },
           ]);
 
-          const handleInputChange = (e, id, columnName) => {
-            const newData = data.map((item) => {
-              if (item.id === id) {
-                return { ...item, [columnName]: e.target.value };
-              }
-              return item;
-            });
-            setData(newData);
+          const tableRef = useRef(); // Reference to the table element
+
+          // Handle key events for navigation and data entry
+          const handleKeyDown = (e, id, columnName) => {
+            const currentCell = tableRef.current.querySelector(
+              `#cell-${id}-${columnName}`
+            );
+            const cellIndex = currentCell.cellIndex;
+            const rowIndex = currentCell.parentElement.rowIndex;
+
+            switch (e.key) {
+              case "ArrowUp":
+                if (rowIndex > 1) {
+                  const nextCell =
+                    tableRef.current.rows[rowIndex - 1].cells[cellIndex];
+                  nextCell.focus();
+                }
+                break;
+              case "ArrowDown":
+                if (rowIndex < tableRef.current.rows.length - 1) {
+                  const nextCell =
+                    tableRef.current.rows[rowIndex + 1].cells[cellIndex];
+                  nextCell.focus();
+                }
+                break;
+              case "ArrowLeft":
+                if (cellIndex > 0) {
+                  const nextCell =
+                    tableRef.current.rows[rowIndex].cells[cellIndex - 1];
+                  nextCell.focus();
+                }
+                break;
+              case "ArrowRight":
+                if (cellIndex < currentCell.parentElement.cells.length - 1) {
+                  const nextCell =
+                    tableRef.current.rows[rowIndex].cells[cellIndex + 1];
+                  nextCell.focus();
+                }
+                break;
+              case "Enter":
+                const nextCellId = (id % data.length) + 1; // Calculate the next cell id
+                const nextColumnName =
+                  columnName === "phone"
+                    ? "mount"
+                    : data[nextCellId - 1][columnName]
+                    ? columnName
+                    : columnName === "mount"
+                    ? "email"
+                    : "address";
+                const newData = data.map((item) => {
+                  if (item.id === nextCellId) {
+                    return { ...item, [nextColumnName]: currentCell.innerText };
+                  }
+                  return item;
+                });
+                setData(newData);
+                break;
+              default:
+                break;
+            }
           };
 
-          const handleSubmit = () => {
-            console.log("Data to be posted:", data);
-            alert("Data submitted successfully!");
-            // Here, you would typically make an API request to send the data to your backend
-            // For example:
-            // fetch('https://your-api-endpoint.com', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(data),
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('API Response:', data);
-            //     // Handle API response as needed
-            // })
-            // .catch(error => {
-            //     console.error('Error:', error);
-            // });
+          // Generate table rows based on data
+          const createTableRows = () => {
+            return data.map((item) => (
+              <tr key={item.id}>
+                <td
+                  contentEditable
+                  suppressContentEditableWarning
+                  id={`cell-${item.id}-mount`}
+                  onKeyDown={(e) => handleKeyDown(e, item.id, "mount")}
+                >
+                  {item.mount}
+                </td>
+                <td
+                  contentEditable
+                  suppressContentEditableWarning
+                  id={`cell-${item.id}-email`}
+                  onKeyDown={(e) => handleKeyDown(e, item.id, "email")}
+                >
+                  {item.email}
+                </td>
+                <td
+                  contentEditable
+                  suppressContentEditableWarning
+                  id={`cell-${item.id}-address`}
+                  onKeyDown={(e) => handleKeyDown(e, item.id, "address")}
+                >
+                  {item.address}
+                </td>
+                <td
+                  contentEditable
+                  suppressContentEditableWarning
+                  id={`cell-${item.id}-phone`}
+                  onKeyDown={(e) => handleKeyDown(e, item.id, "phone")}
+                >
+                  {item.phone}
+                </td>
+              </tr>
+            ));
+          };
+
+          // Function to add a new row to the table
+          const addRow = () => {
+            setData([
+              ...data,
+              {
+                id: data.length + 1,
+                mount: "",
+                email: "",
+                address: "",
+                phone: "",
+              },
+            ]);
           };
 
           return (
-            <div>
+            <>
               <h1>Editable Table IWCN-Task-1</h1>
-              <table style={{ border: "1px solid black" }}>
-                <thead>
-                  <tr>
-                    <th>Mount</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.mount}
-                          onChange={(e) =>
-                            handleInputChange(e, item.id, "mount")
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="email"
-                          value={item.email}
-                          onChange={(e) =>
-                            handleInputChange(e, item.id, "email")
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.address}
-                          onChange={(e) =>
-                            handleInputChange(e, item.id, "address")
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.phone}
-                          onChange={(e) =>
-                            handleInputChange(e, item.id, "phone")
-                          }
-                        />
-                      </td>
+              <div>
+                <button className="add-row-btn" onClick={addRow}>
+                  +
+                </button>
+                <div className="add-row-container"></div>
+                <table ref={tableRef} style={{ border: "1px solid black" }}>
+                  <thead>
+                    <tr>
+                      <th>Mount</th>
+                      <th>Email</th>
+                      <th>Address</th>
+                      <th>Phone</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button onClick={handleSubmit}>Submit</button>
-            </div>
+                  </thead>
+                  <tbody>{createTableRows()}</tbody>
+                </table>
+              </div>
+            </>
           );
         };
+
         ReactDOM.render(<App />, document.getElementById("root"));
       </script>
     </div>
