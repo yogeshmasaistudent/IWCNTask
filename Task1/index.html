@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editable Table with React</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Link to the CSS file -->
+
+    <!-- React CDN and Babel Standalone -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+
+    <div id="root" class="container">
+      <!-- Add class "container" for styling -->
+      <!-- React component -->
+      <script type="text/babel">
+        const { useState } = React; // Destructure useState directly from React
+        const App = () => {
+          const [data, setData] = useState([
+            { id: 1, mount: "", email: "", address: "", phone: "" },
+            { id: 2, mount: "", email: "", address: "", phone: "" },
+            { id: 3, mount: "", email: "", address: "", phone: "" },
+            { id: 4, mount: "", email: "", address: "", phone: "" },
+            { id: 5, mount: "", email: "", address: "", phone: "" },
+            { id: 6, mount: "", email: "", address: "", phone: "" },
+            { id: 7, mount: "", email: "", address: "", phone: "" },
+            { id: 8, mount: "", email: "", address: "", phone: "" },
+          ]);
+
+          const handleInputChange = (e, id, columnName) => {
+            const newData = data.map((item) => {
+              if (item.id === id) {
+                return { ...item, [columnName]: e.target.value };
+              }
+              return item;
+            });
+            setData(newData);
+          };
+
+          const handleSubmit = () => {
+            console.log("Data to be posted:", data);
+            alert("Data submitted successfully!");
+            // Here, you would typically make an API request to send the data to your backend
+            // For example:
+            // fetch('https://your-api-endpoint.com', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(data),
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log('API Response:', data);
+            //     // Handle API response as needed
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            // });
+          };
+
+          return (
+            <div>
+              <h1>Editable Table IWCN-Task-1</h1>
+              <table style={{ border: "1px solid black" }}>
+                <thead>
+                  <tr>
+                    <th>Mount</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((item) => (
+                    <tr key={item.id}>
+                      <td>
+                        <input
+                          type="text"
+                          value={item.mount}
+                          onChange={(e) =>
+                            handleInputChange(e, item.id, "mount")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="email"
+                          value={item.email}
+                          onChange={(e) =>
+                            handleInputChange(e, item.id, "email")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={item.address}
+                          onChange={(e) =>
+                            handleInputChange(e, item.id, "address")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={item.phone}
+                          onChange={(e) =>
+                            handleInputChange(e, item.id, "phone")
+                          }
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button onClick={handleSubmit}>Submit</button>
+            </div>
+          );
+        };
+        ReactDOM.render(<App />, document.getElementById("root"));
+      </script>
+    </div>
+  </body>
+</html>
