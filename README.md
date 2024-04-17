@@ -11,7 +11,7 @@
 - [Live Demo Link](https://exquisite-chebakia-35c993.netlify.app/) - Insert your live demo link here.
 
 ### Video Demo
-- [Video Demo Link](#) - Insert your video demo link here.
+- [Video Demo Link](https://drive.google.com/file/d/1i0PidUyeFK79-xUpyyKn8JQEaDoXbkrc/view?usp=sharing) - Insert your video demo link here.
 
 ---
 
@@ -34,6 +34,8 @@
 - PUT `/api/notes/:id` - Update a note by ID.
 - DELETE `/api/notes/:id` - Delete a note by ID.
 
+### Video Demo For Backend 
+- [Video Demo Link](https://drive.google.com/file/d/1i0PidUyeFK79-xUpyyKn8JQEaDoXbkrc/view?usp=sharing) 
 ### Frontend Features
 - Add a new note with title and description.
 - Display all notes in a list with edit and delete options.
