@@ -8,7 +8,7 @@
 - Implemented editable columns with data ready to post to an API.
 
 ### Live Demo
-- [Live Demo Link](#) - Insert your live demo link here.
+- [Live Demo Link](https://exquisite-chebakia-35c993.netlify.app/) - Insert your live demo link here.
 
 ### Video Demo
 - [Video Demo Link](#) - Insert your video demo link here.
@@ -46,9 +46,6 @@
 4. Run the React.js frontend using `npm start` in a separate terminal.
 5. Access the frontend at `http://localhost:3000`.
 
-### Live Demo
-- [Live Demo Link](#) - Insert your live demo link here.
-
 ### Video Demo
 - [Video Demo Link](#) - Insert your video demo link here.
 
@@ -60,8 +57,3 @@
 - Posted data to the API endpoint `https://chimpu.xyz/api/post.php` with the variable `phonenumber`.
 - Displayed the data received in headers on the page.
 
-### Live Demo
-- [Live Demo Link](#) - Insert your live demo link here.
-
-### Video Demo
-- [Video Demo Link](#) - Insert your video demo link here.
